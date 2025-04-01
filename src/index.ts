@@ -58,6 +58,10 @@ app.get('/', (c) => {
 app.get('/api/:owner/:repo/:pkg', cache({
 	cacheName: 'github-pkg-stats',
 	cacheControl: 'max-age=10800', // 3 hours
+	keyGenerator(c) {
+		const noCache = c.req.query('no-cache') !== undefined;
+		return noCache ? `${c.req.url}-${Date.now().toString()}` : c.req.url;
+	},
 }), async (c) => {
 	const { owner, repo, pkg } = c.req.param();
 	const githubUrl = `https://github.com/${owner}/${repo}/pkgs/container/${pkg}`;
