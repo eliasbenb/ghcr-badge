@@ -11,6 +11,50 @@ app.use('*', async (c, next) => {
 	c.header('Access-Control-Allow-Origin', '*');
 });
 
+app.get('/', (c) => {
+	return c.html(`
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>GitHub Container Registry Badge API</title>
+			<style>
+				body {
+					font-family: Arial, sans-serif;
+					line-height: 1.6;
+					margin: 2rem;
+				}
+				h1 {
+					color: #333;
+				}
+				a {
+					color: #2496ed;
+					text-decoration: none;
+				}
+				a:hover {
+					text-decoration: underline;
+				}
+			</style>
+		</head>
+		<body>
+			<h1>GitHub Container Registry Badge API</h1>
+			<p>Use the following endpoints:</p>
+			<ul>
+				<li><a href="/api/:owner/:repo/:pkg"><code>/api/:owner/:repo/:pkg</code></a> - Get package download stats.</li>
+				<li><a href="/shield/:owner/:repo/:pkg"><code>/shield/:owner/:repo/:pkg</code></a> - Get a dynamic badge for Docker pulls.</li>
+			</ul>
+			<p>Example:</p>
+			<ul>
+				<li><a href="/api/eliasbenb/PlexAniBridge/plexanibridge"><code>/api/eliasbenb/PlexAniBridge/plexanibridge</code></a> - Get badge stats for <a href="https://github.com/eliasbenb/PlexAniBridge" target="_blank">eliasbenb/PlexAniBridge</a>.</li>
+				<li><a href="/shield/eliasbenb/PlexAniBridge/plexanibridge"><code>/shield/eliasbenb/PlexAniBridge/plexanibridge</code></a> - Get a badge for Docker pulls for <a href="https://github.com/eliasbenb/PlexAniBridge" target="_blank">eliasbenb/PlexAniBridge</a>.</li>
+			</ul>
+			<p>Visit the <a href="https://github.com/eliasbenb/ghcr-badge" target="_blank">GitHub repository</a> for more details.</p>
+		</body>
+		</html>
+	`);
+});
+
 app.get('/api/:owner/:repo/:pkg', cache({
 	cacheName: 'github-pkg-stats',
 	cacheControl: 'max-age=10800', // 3 hours
