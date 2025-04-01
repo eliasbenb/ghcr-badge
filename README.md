@@ -18,13 +18,13 @@
 
 ## Example
 
-To get the get the stats for a package:
+To get the get the stats for a package with the API:
 
 ```bash
 curl https://ghcr-badge.elias.eu.org/api/eliasbenb/PlexAniBridge/plexanibridge
 ```
 
-To use the default badge, you can use the following URL:
+To embed the default badge, which displays the download count, in markdown:
 
 ```markdown
 ![Docker Pulls](https://ghcr-badge.elias.eu.org/shield/eliasbenb/PlexAniBridge/plexanibridge)
@@ -33,4 +33,8 @@ To use the default badge, you can use the following URL:
 ![Docker Pulls](https://ghcr-badge.elias.eu.org/shield/eliasbenb/PlexAniBridge/plexanibridge)
 
 
-You can also write your own badge with shields.io's [dynamic JSON badge](https://shields.io/badges/dynamic-json-badge) and have it point to the `/api` endpoint.
+You can also write your own badge with shields.io's [dynamic JSON badge](https://shields.io/badges/dynamic-json-badge) and have it point to the `/api` endpoint. E.g.:
+
+```
+https://img.shields.io/badge/dynamic/json?url=https://ghcr-badge.elias.eu.org/api/eliasbenb/PlexAniBridge/plexanibridge&query=downloadCount
+```
