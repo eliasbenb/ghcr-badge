@@ -9,6 +9,9 @@
 	"compatibility_date": "2025-03-27",
 	"observability": {
 		"enabled": true
+	},
+	"dev": {
+		"ip": "127.0.0.1"
 	}
 	/**
 	 * Smart Placement

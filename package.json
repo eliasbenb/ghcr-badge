@@ -1,6 +1,6 @@
 {
 	"name": "ghcr-badge",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy",
@@ -15,5 +15,9 @@
 		"typescript": "^5.5.2",
 		"vitest": "~3.0.7",
 		"wrangler": "^4.6.0"
+	},
+	"dependencies": {
+		"hana": "^0.0.2",
+		"hono": "^4.7.5"
 	}
 }
