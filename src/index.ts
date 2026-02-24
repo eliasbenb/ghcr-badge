@@ -76,7 +76,7 @@ app.get('/api/:owner/:repo/:pkg', cache({
 		let downloadCount: string | null = null;
 		let downloadCountRaw: string | null = null;
 
-		const totalDownloadsMatch = html.match(/<span class="d-block color-fg-muted text-small mb-1">Total downloads<\/span>\s*<h3 title="(\d+)">([^<]+)<\/h3>/i);
+		const totalDownloadsMatch = html.match(/<span class="d-block color-fg-muted text-small tmb-mb-1">Total downloads<\/span>\s*<h3 title="(\d+)">([^<]+)<\/h3>/i);
 		if (totalDownloadsMatch) {
 			downloadCountRaw = totalDownloadsMatch[1];
 			downloadCount = totalDownloadsMatch[2];
