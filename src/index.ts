@@ -76,10 +76,17 @@ app.get('/api/:owner/:repo/:pkg', cache({
 		let downloadCount: string | null = null;
 		let downloadCountRaw: string | null = null;
 
-		const totalDownloadsMatch = html.match(/<span class="d-block color-fg-muted text-small mb-1">Total downloads<\/span>\s*<h3 title="(\d+)">([^<]+)<\/h3>/i);
+		// Find the "Total downloads" section and look for any <h3> tag within the next 500 characters
+		const totalDownloadsMatch = html.match(/Total downloads[\s\S]{0,500}?<h3\b([^>]*)>([^<]+)<\/h3>/i);
 		if (totalDownloadsMatch) {
-			downloadCountRaw = totalDownloadsMatch[1];
-			downloadCount = totalDownloadsMatch[2];
+			const h3Attributes = totalDownloadsMatch[1] ?? '';
+			// The title contains the raw integer download count, while the text content may contain formatting (e.g., "1.2K")
+			const titleMatch = h3Attributes.match(/\btitle="([\d,]+)"/i);
+			const rawFromTitle = titleMatch?.[1]?.replace(/\D/g, '') ?? null;
+			const rawFromText = totalDownloadsMatch[2]?.replace(/\D/g, '') ?? null;
+
+			downloadCountRaw = rawFromTitle || rawFromText;
+			downloadCount = totalDownloadsMatch[2]?.trim() || null;
 		}
 
 		const result = {
