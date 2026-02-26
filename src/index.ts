@@ -67,7 +67,10 @@ async function fetchPackageStats(urls: string[]) {
 
 	return {
 		downloadCount: hasRawCounts
-			? new Intl.NumberFormat('en-US').format(summedRawCount)
+			? new Intl.NumberFormat('en-US', {
+				notation: 'compact',
+				maximumFractionDigits: 1,
+			}).format(summedRawCount)
 			: successfulResults[0].downloadCount,
 		downloadCountRaw: hasRawCounts ? summedRawCount : null,
 		urls: successfulResults.map((result) => result.url),
