@@ -6,17 +6,13 @@
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
-		"test": "vitest",
 		"cf-typegen": "wrangler types"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "^0.12.17",
 		"typescript": "^5.5.2",
-		"vitest": "~3.0.7",
 		"wrangler": "^4.6.0"
 	},
 	"dependencies": {
-		"hana": "^0.0.2",
 		"hono": "^4.7.5"
 	}
 }
