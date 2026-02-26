@@ -114,6 +114,43 @@ async function handleApiRequest(c: Context<{ Bindings: Env }>) {
 	}
 }
 
+async function handleAniBridgeApiRequest(c: Context<{ Bindings: Env }>) {
+	const urls = [
+		'https://github.com/anibridge/anibridge/pkgs/container/anibridge',
+		'https://github.com/users/eliasbenb/packages/container/package/plexanibridge',
+	];
+
+	try {
+		const { downloadCount, downloadCountRaw, urls: resolvedUrls } = await fetchPackageStats(urls);
+
+		return c.json({
+			downloadCount,
+			downloadCountRaw,
+			repo: {
+				url: resolvedUrls[0],
+				urls: resolvedUrls,
+				owner: 'anibridge',
+				repo: 'anibridge',
+				package: 'anibridge',
+			},
+			success: downloadCount !== null,
+			timestamp: new Date().toISOString(),
+		}, 200);
+	} catch (error) {
+		return c.json({
+			repo: {
+				url: urls[0],
+				owner: 'anibridge',
+				repo: 'anibridge',
+				package: 'anibridge',
+			},
+			success: false,
+			error: error instanceof Error ? error.message : String(error),
+			timestamp: new Date().toISOString(),
+		}, 500);
+	}
+}
+
 app.use('*', async (c, next) => {
 	await next();
 	c.header('Access-Control-Allow-Origin', '*');
@@ -166,6 +203,15 @@ app.get('/', (c) => {
 		</html>
 	`);
 });
+
+app.get('/api/anibridge/anibridge/anibridge', cache({
+	cacheName: 'github-pkg-stats',
+	cacheControl: 'max-age=10800', // 3 hours
+	keyGenerator(c) {
+		const noCache = c.req.query('no-cache') !== undefined;
+		return noCache ? `${c.req.url}-${Date.now().toString()}` : c.req.url;
+	},
+}), handleAniBridgeApiRequest);
 
 app.get('/api/:owner/:repo/:pkg', cache({
 	cacheName: 'github-pkg-stats',
