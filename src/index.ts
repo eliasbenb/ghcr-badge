@@ -28,29 +28,50 @@ function extractDownloadStats(html: string) {
 }
 
 async function fetchPackageStats(urls: string[]) {
-	const errors: string[] = [];
-
-	for (const url of urls) {
+	const results = await Promise.all(urls.map(async (url) => {
 		try {
 			const response = await fetch(url);
 			if (!response.ok) {
-				errors.push(`${url} -> ${response.status}`);
-				continue;
+				return {
+					success: false as const,
+					url,
+					error: `${url} -> ${response.status}`,
+				};
 			}
 
 			const html = await response.text();
 			const stats = extractDownloadStats(html);
 
 			return {
-				...stats,
+				success: true as const,
 				url,
+				...stats,
 			};
 		} catch (error) {
-			errors.push(`${url} -> ${error instanceof Error ? error.message : String(error)}`);
+			return {
+				success: false as const,
+				url,
+				error: `${url} -> ${error instanceof Error ? error.message : String(error)}`,
+			};
 		}
+	}));
+
+	const successfulResults = results.filter((result) => result.success);
+	if (successfulResults.length === 0) {
+		const errors = results.filter((result) => !result.success).map((result) => result.error);
+		throw new Error(`Failed to fetch package page. Attempts: ${errors.join('; ')}`);
 	}
 
-	throw new Error(`Failed to fetch package page. Attempts: ${errors.join('; ')}`);
+	const hasRawCounts = successfulResults.some((result) => result.downloadCountRaw !== null);
+	const summedRawCount = successfulResults.reduce((sum, result) => sum + (result.downloadCountRaw ?? 0), 0);
+
+	return {
+		downloadCount: hasRawCounts
+			? new Intl.NumberFormat('en-US').format(summedRawCount)
+			: successfulResults[0].downloadCount,
+		downloadCountRaw: hasRawCounts ? summedRawCount : null,
+		urls: successfulResults.map((result) => result.url),
+	};
 }
 
 async function handleApiRequest(c: Context<{ Bindings: Env }>) {
@@ -58,13 +79,14 @@ async function handleApiRequest(c: Context<{ Bindings: Env }>) {
 	const githubUrl = repo ? `https://github.com/${owner}/${repo}/pkgs/container/${pkg}` : `https://github.com/users/${owner}/packages/container/package/${pkg}`;
 
 	try {
-		const { downloadCount, downloadCountRaw, url } = await fetchPackageStats([githubUrl]);
+		const { downloadCount, downloadCountRaw, urls } = await fetchPackageStats([githubUrl]);
 
 		const result = {
 			downloadCount,
 			downloadCountRaw,
 			repo: {
-				url,
+				url: urls[0],
+				urls,
 				owner,
 				repo: repo ?? null,
 				package: pkg,

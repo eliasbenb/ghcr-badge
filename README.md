@@ -46,12 +46,12 @@ To embed the default badge, which displays the download count, in markdown:
 
 ```markdown
 ![Docker Pulls](https://ghcr-badge.elias.eu.org/shield/eliasbenb/PlexAniBridge/plexanibridge)
+```
 
 For user-scoped package pages:
 
 ```markdown
 ![Docker Pulls](https://ghcr-badge.elias.eu.org/shield/eliasbenb/plexanibridge)
-```
 ```
 
 ![Docker Pulls](https://ghcr-badge.elias.eu.org/shield/eliasbenb/PlexAniBridge/plexanibridge)
