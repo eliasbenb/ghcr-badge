@@ -1,6 +1,6 @@
 # ghcr-badge
 
-`ghcr-badge` is a simple API service that can be used to generate [shields.io](https://shields.io) badges displaying the download count of a package hosted on the GitHub Container Registry. 
+`ghcr-badge` is a simple API service that can be used to generate [shields.io](https://shields.io) badges displaying the download count of a package hosted on the GitHub Container Registry.
 
 ## Endpoints
 
@@ -55,7 +55,6 @@ For user-scoped package pages:
 ```
 
 ![Docker Pulls](https://ghcr-badge.elias.eu.org/shield/eliasbenb/PlexAniBridge/plexanibridge)
-
 
 You can also write your own badge with shields.io's [dynamic JSON badge](https://shields.io/badges/dynamic-json-badge) and have it point to the `/api` endpoint. E.g.:
 

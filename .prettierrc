@@ -1,6 +1,10 @@
 {
-	"printWidth": 140,
-	"singleQuote": true,
-	"semi": true,
-	"useTabs": true
+    "useTabs": false,
+    "tabWidth": 4,
+    "singleQuote": false,
+    "trailingComma": "all",
+    "printWidth": 88,
+    "objectWrap": "collapse",
+    "bracketSameLine": true,
+    "singleAttributePerLine": true
 }

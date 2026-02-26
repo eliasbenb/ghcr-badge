@@ -14,5 +14,12 @@
 			"onAutoForward": "notify"
 		}
     },
-	"postCreateCommand": "npm install"
+	"postCreateCommand": "npm install",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"esbenp.prettier-vscode"
+			]
+		}
+	}
 }
